@@ -1,0 +1,101 @@
+body {
+  background: linear-gradient(120deg, #1e3c72, #2a5298);
+  font-family: Arial;
+  color: white;
+}
+
+.container {
+  width: 700px;
+  max-width: 100%;
+  margin: auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+.inputs input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+}
+
+.buttons {
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #ff9800;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #ffc107;
+}
+
+.visual, .final {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  border-radius: 10px;
+  min-height: 100px;
+}
+
+.step {
+  padding: 8px;
+  margin: 5px 0;
+  border-left: 5px solid #00e5ff;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.dp-cell {
+  display: inline-block;
+  width: 45px;
+  padding: 5px;
+  margin: 2px;
+  background: #1565c0;
+  text-align: center;
+  border-radius: 5px;
+  animation: pop 0.3s ease-in-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0.7); }
+  to { transform: scale(1); }
+}
+
+@media (max-width: 700px) {
+
+  .container {
+    width: 100%;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .visual, .final {
+    overflow-x: auto;
+  }
+
+}

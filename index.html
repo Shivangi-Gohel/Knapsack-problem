@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Knapsack Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Knapsack Problem Visualizer</h1>
+
+  <div class="inputs">
+    <input id="values" placeholder="Values (60,100,120)">
+    <input id="weights" placeholder="Weights (10,20,30)">
+    <input id="capacity" type="number" placeholder="Capacity (50)">
+  </div>
+
+  <div class="buttons">
+    <button onclick="startGreedy()">Greedy</button>
+    <button onclick="startDP()">Dynamic</button>
+  </div>
+
+  <div class="visual">
+    <h2>Process</h2>
+    <div id="process"></div>
+  </div>
+
+  <div class="final">
+    <h2>Final Answer</h2>
+    <div id="result"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
