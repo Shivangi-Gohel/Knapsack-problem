@@ -1,73 +1,95 @@
-function getInput() {
-  return {
-    values: document.getElementById("values").value.split(",").map(Number),
-    weights: document.getElementById("weights").value.split(",").map(Number),
-    capacity: Number(document.getElementById("capacity").value),
-  };
-}
-
-function clearUI() {
+function clearScreen() {
   document.getElementById("process").innerHTML = "";
   document.getElementById("result").innerHTML = "";
+  document.getElementById("table").innerHTML = "";
 }
 
-/* ================= GREEDY ANIMATION ================= */
+function getInputs() {
+  var values = document.getElementById("values").value.split(",");
+  var weights = document.getElementById("weights").value.split(",");
+  var capacity = parseInt(document.getElementById("capacity").value);
 
-async function startGreedy() {
-  clearUI();
-  const { values, weights, capacity } = getInput();
+  for (var i = 0; i < values.length; i++) {
+    values[i] = parseInt(values[i]);
+    weights[i] = parseInt(weights[i]);
+  }
 
-  let items = values.map((v, i) => ({
-    value: v,
-    weight: weights[i],
-    ratio: v / weights[i],
-  }));
+  return { values, weights, capacity };
+}
 
-  items.sort((a, b) => b.ratio - a.ratio);
+function addStep(msg) {
+  document.getElementById("process").innerHTML += "• " + msg + "<br>";
+}
 
-  let remaining = capacity;
-  let total = 0;
+//////////////// GREEDY //////////////////
+function runGreedy() {
+  clearScreen();
 
-  for (let item of items) {
-    await sleep(800);
+  var data = getInputs();
+  var values = data.values;
+  var weights = data.weights;
+  var capacity = data.capacity;
 
-    if (remaining >= item.weight) {
-      remaining -= item.weight;
-      total += item.value;
-      addStep(`Picked full item (W:${item.weight}, V:${item.value})`);
+  addStep("Greedy algorithm started");
+
+  var items = [];
+  for (var i = 0; i < values.length; i++) {
+    items.push({
+      value: values[i],
+      weight: weights[i],
+      ratio: values[i] / weights[i],
+      index: i + 1,
+    });
+  }
+
+  items.sort(function (a, b) {
+    return b.ratio - a.ratio;
+  });
+
+  var total = 0;
+  var remaining = capacity;
+
+  for (var i = 0; i < items.length; i++) {
+    if (remaining === 0) break;
+
+    if (items[i].weight <= remaining) {
+      remaining -= items[i].weight;
+      total += items[i].value;
+      addStep("Took Item " + items[i].index + " fully");
     } else {
-      let fraction = remaining / item.weight;
-      total += item.value * fraction;
-      addStep(
-        `Picked ${fraction.toFixed(2)} fraction of item (W:${item.weight}, V:${item.value})`,
-      );
-      break;
+      var frac = remaining / items[i].weight;
+      total += items[i].value * frac;
+      addStep("Took partial Item " + items[i].index);
+      remaining = 0;
     }
   }
 
   document.getElementById("result").innerHTML =
-    `<b>Maximum Value (Greedy):</b> ${total.toFixed(2)}`;
+    "Maximum Value (Greedy): " + total.toFixed(2);
 }
 
-/* ================= DP ANIMATION ================= */
+//////////////// DYNAMIC PROGRAMMING //////////////////
+function runDP() {
+  clearScreen();
 
-async function startDP() {
-  clearUI();
-  const { values, weights, capacity } = getInput();
-  const n = values.length;
+  var data = getInputs();
+  var values = data.values;
+  var weights = data.weights;
+  var capacity = data.capacity;
+  var n = values.length;
 
-  let dp = Array(n + 1)
-    .fill()
-    .map(() => Array(capacity + 1).fill(0));
-  const process = document.getElementById("process");
+  addStep("Dynamic Programming started");
 
-  for (let i = 1; i <= n; i++) {
-    let row = document.createElement("div");
-    row.className = "dp-row";
+  var dp = [];
+  for (var i = 0; i <= n; i++) {
+    dp[i] = [];
+    for (var w = 0; w <= capacity; w++) {
+      dp[i][w] = 0;
+    }
+  }
 
-    for (let w = 0; w <= capacity; w++) {
-      await sleep(100);
-
+  for (var i = 1; i <= n; i++) {
+    for (var w = 0; w <= capacity; w++) {
       if (weights[i - 1] <= w) {
         dp[i][w] = Math.max(
           values[i - 1] + dp[i - 1][w - weights[i - 1]],
@@ -76,29 +98,33 @@ async function startDP() {
       } else {
         dp[i][w] = dp[i - 1][w];
       }
-
-      let cell = document.createElement("div");
-      cell.className = "dp-cell";
-      cell.innerText = dp[i][w];
-      row.appendChild(cell);
     }
-
-    process.appendChild(row);
+    addStep("Processed Item " + i);
   }
 
+  drawTable(dp, n, capacity);
+
   document.getElementById("result").innerHTML =
-    `<b>Maximum Value (DP):</b> ${dp[n][capacity]}`;
+    "Maximum Value (DP): " + dp[n][capacity];
 }
 
-/* ================= HELPERS ================= */
+function drawTable(dp, n, capacity) {
+  var html = "<table><tr><th>i\\w</th>";
 
-function addStep(text) {
-  const div = document.createElement("div");
-  div.className = "step";
-  div.innerText = text;
-  document.getElementById("process").appendChild(div);
-}
+  for (var w = 0; w <= capacity; w++) {
+    html += "<th>" + w + "</th>";
+  }
+  html += "</tr>";
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  for (var i = 0; i <= n; i++) {
+    html += "<tr><th>" + i + "</th>";
+    for (var w = 0; w <= capacity; w++) {
+      var cls = i === n && w === capacity ? "highlight" : "";
+      html += "<td class='" + cls + "'>" + dp[i][w] + "</td>";
+    }
+    html += "</tr>";
+  }
+
+  html += "</table>";
+  document.getElementById("table").innerHTML = html;
 }
