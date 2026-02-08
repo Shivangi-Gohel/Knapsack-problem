@@ -1,38 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Animated Knapsack Visualizer</title>
+  <title>Knapsack Problem Visualizer</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="container">
-  <h1>Knapsack Problem Visualizer</h1>
+  <div class="container">
+    <h1>🎒 Knapsack Problem Visualizer</h1>
 
-  <div class="inputs">
-    <input id="values" placeholder="Values (60,100,120)">
-    <input id="weights" placeholder="Weights (10,20,30)">
-    <input id="capacity" type="number" placeholder="Capacity (50)">
+    <div class="explanation">
+      <p><strong>How it works:</strong> You have a backpack with limited space. Choose items to get maximum value
+        without going over capacity.</p>
+
+      <div class="example">
+        <strong>Try this example:</strong><br>
+        Values: 60, 100, 120<br>
+        Weights: 10, 20, 30<br>
+        Capacity: 50
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div>
+        <label for="values">💰 Item Values:</label>
+        <input type="text" id="values" placeholder="Example: 60,100,120" value="60,100,120">
+      </div>
+
+      <div>
+        <label for="weights">⚖️ Item Weights:</label>
+        <input type="text" id="weights" placeholder="Example: 10,20,30" value="10,20,30">
+      </div>
+
+      <div>
+        <label for="capacity">🎒 Knapsack Capacity:</label>
+        <input type="number" id="capacity" placeholder="Example: 50" value="50">
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button onclick="runGreedy()">🚀 Greedy Algorithm</button>
+      <button onclick="runDP()">🧠 Dynamic Programming</button>
+      <button onclick="clearScreen()">🗑️ Clear</button>
+    </div>
+
+    <div class="visual">
+      <h2>📝 Step-by-Step Process</h2>
+      <div id="process"></div>
+    </div>
+
+    <div class="result-box">
+      <h2>🏆 Result</h2>
+      <div id="result"></div>
+    </div>
   </div>
 
-  <div class="buttons">
-    <button onclick="startGreedy()">Greedy</button>
-    <button onclick="startDP()">Dynamic</button>
-  </div>
-
-  <div class="visual">
-    <h2>Process</h2>
-    <div id="process"></div>
-  </div>
-
-  <div class="final">
-    <h2>Final Answer</h2>
-    <div id="result"></div>
-  </div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>
