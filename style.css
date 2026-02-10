@@ -123,3 +123,8 @@ th {
   color: black;
   font-weight: bold;
 }
+
+#table {
+  overflow-x: auto;
+  max-width: 100%;
+}
